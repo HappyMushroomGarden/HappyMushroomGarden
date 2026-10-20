@@ -133,7 +133,7 @@
 </head>
 <body>
 
-    <!-- ФОНОВОЕ ВИДЕО (ЗАПУСКАЕТСЯ СРАЗУ, БЕЗ СКРИПТОВЫХ ОШИБОК) -->
+    <!-- ФОНОВОЕ ВИДЕО (ИЗНАЧАЛЬНО С МЬЮТОМ ДЛЯ ГАРАНТИРОВАННОГО СТАРТА) -->
     <video id="bg-video" autoplay muted loop playsinline>
         <source src="background.mp4" type="video/mp4">
     </video>
@@ -170,6 +170,13 @@
         const modal = document.getElementById('video-modal');
         const player = document.getElementById('popup-player');
         const bgVideo = document.getElementById('bg-video');
+
+        // Снимаем мьют со звука фона по первому же клику на сайт
+        window.addEventListener('click', () => {
+            if (bgVideo.muted) {
+                bgVideo.muted = false;
+            }
+        }, { once: true });
 
         function openVideo(videoSrc) {
             bgVideo.pause();

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HappyKinderGarten</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: monospace;
+        }
+
+        /* 1. Фоновое видео на весь экран */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* 2. Три портала в ряд по центру */
+        .portals-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+            max-width: 95vw;
+        }
+
+        .portal-card {
+            width: min(300px, 28vw);
+            height: min(450px, 42vw);
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .portal-card.no-click {
+            cursor: default;
+        }
+
+        .portal-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+        }
+
+        .portal-card:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        /* 3. Иконка Glock19 (Soundcloud) */
+        .sc-link-box {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            width: 100px;
+            height: 100px;
+            display: block;
+            background: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            overflow: visible;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .sc-link-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        .sc-link-box:hover {
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+        }
+
+        /* 4. Модальное окно для видео */
+        #video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+        }
+
+        #video-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            cursor: default;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ФОНОВОЕ ВИДЕО СО ЗВУКОМ -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <!-- ТРИ ПОРТАЛА В РЯД ПО ЦЕНТРУ -->
+    <div class="portals-container">
+        <div class="portal-card" onclick="openVideo(event, 'edits.mp4')">
+            <img src="caps.png" alt="Edit 1">
+        </div>
+        <div class="portal-card" onclick="openVideo(event, 'edits2.mp4')">
+            <img src="caps2.png" alt="Edit 2">
+        </div>
+        <div class="portal-card no-click">
+            <img src="caps3.png" alt="Edit 3">
+        </div>
+    </div>
+
+    <!-- ТОЛЬКО ИКОНКА GLOCK19 (SOUNDCLOUD) -->
+    <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
+        <img src="glock19.png" alt="Glock19">
+    </a>
+
+    <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО-ЭДИТОМ -->
+    <div id="video-modal" onclick="closeVideo()">
+        <div class="modal-content" onclick="event.stopPropagation()">

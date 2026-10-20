@@ -54,8 +54,8 @@
         }
 
         .portal-card {
-            width: 170px;  /* Фиксированная аккуратная ширина */
-            height: 255px; /* Фиксированная пропорциональная высота */
+            width: 170px;
+            height: 255px;
             flex-shrink: 0;
             cursor: pointer;
             display: flex;
@@ -73,7 +73,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            /* УБРАНО ЛЮБОЕ РАЗМЫТИЕ И ТЕНИ: Края теперь максимально резкие */
             filter: none;
         }
 
@@ -98,7 +97,6 @@
             height: 100%;
             object-fit: contain;
             display: block;
-            /* У глока тень оставляем для объёма, или тоже filter: none; если не нужно */
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
@@ -107,3 +105,95 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.95);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #video-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            cursor: default;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ФОНОВОЕ ВИДЕО (ЗАПУСКАЕТСЯ СРАЗУ, БЕЗ СКРИПТОВЫХ ОШИБОК) -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <!-- ТРИ ПОРТАЛА В РЯД -->
+    <div class="portals-container">
+        <div class="portal-card" onclick="openVideo('edits.mp4')">
+            <img src="caps.png" alt="Edit 1">
+        </div>
+        <div class="portal-card" onclick="openVideo('edits2.mp4')">
+            <img src="caps2.png" alt="Edit 2">
+        </div>
+        <div class="portal-card no-click">
+            <img src="caps3.png" alt="Edit 3">
+        </div>
+    </div>
+
+    <!-- ИКОНКА GLOCK19 (SOUNDCLOUD) -->
+    <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
+        <img src="glock19.png" alt="Glock19">
+    </a>
+
+    <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО -->
+    <div id="video-modal" onclick="closeVideo()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <video id="popup-player" controls preload="auto" playsinline>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('video-modal');
+        const player = document.getElementById('popup-player');
+        const bgVideo = document.getElementById('bg-video');
+
+        function openVideo(videoSrc) {
+            bgVideo.pause();
+            player.src = videoSrc;
+            player.load();
+            modal.classList.add('active');
+            player.play().catch(err => {
+                console.log("Ошибка воспроизведения плеера:", err);
+            });
+        }
+
+        function closeVideo() {
+            player.pause();
+            player.src = '';
+            modal.classList.remove('active');
+            bgVideo.play().catch(() => {});
+        }
+
+        // Закрытие по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

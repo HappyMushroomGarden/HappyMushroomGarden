@@ -25,7 +25,7 @@
             position: relative;
         }
 
-        /* Эффект выключения старого телевизора (TV Turn Off / CRT Off) */
+        /* Эффект выключения старого телевизора */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -38,7 +38,7 @@
             }
             40% {
                 transform: scale(1, 0.005);
-                filter: brightness(2); /* Небольшая вспышка по центру */
+                filter: brightness(2);
             }
             100% {
                 transform: scale(0, 0);
@@ -46,7 +46,7 @@
             }
         }
 
-        /* 1. Кнопка выключения */
+        /* 1. Кнопка выключения (без увеличения и ховера) */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -59,7 +59,6 @@
             border: none;
             cursor: pointer;
             outline: none;
-            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
         .power-btn img {
@@ -68,11 +67,6 @@
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
-        }
-
-        .power-btn:hover {
-            transform: translateX(-50%) scale(1.1);
-            filter: brightness(1.2);
         }
 
         /* Фоновое видео */
@@ -277,6 +271,7 @@
 
         let isShutdown = false;
 
+        // Включение звука фона по первому клику на странице
         window.addEventListener('click', () => {
             if (bgVideo && bgVideo.muted && !isShutdown) {
                 bgVideo.muted = false;
@@ -300,15 +295,41 @@
             if (bgVideo) bgVideo.play().catch(() => {});
         }
 
-        // ВЫКЛЮЧЕНИЕ С ЭФФЕКТОМ ТЕЛЕВИЗОРА
         function triggerShutdown(e) {
             if (e) e.stopPropagation();
             isShutdown = true;
 
-            // 1. Звук клика
+            // Звук кнопки
             if (btnSound) btnSound.play().catch(() => {});
 
-            // 2. Запускаем анимацию выключения ТВ (0.5 сек)
+            // Анимация выключения ТВ
             siteWrapper.classList.add('tv-off');
 
-            // 3. Через 0.5 сек останавливаем фон, убираем весь интерфейс и держим ТЁМНЫЙ ЭКРАН 1 секунду
+            setTimeout(() => {
+                if (bgVideo) bgVideo.pause();
+                player.pause();
+                modal.classList.remove('active');
+                siteWrapper.style.display = 'none';
+
+                // Ровно 1 секунда тёмного экрана перед запуском off.mp4
+                setTimeout(() => {
+                    shutdownScreen.classList.add('active');
+                    shutdownVideo.currentTime = 0;
+                    shutdownVideo.play().catch(() => {});
+                }, 1000);
+
+            }, 500);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (isShutdown) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

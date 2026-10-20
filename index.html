@@ -39,4 +39,148 @@
             border: none;
             cursor: pointer;
             outline: none;
-            transition: transform 0.2
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .power-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        .power-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        /* 2. Фоновое видео на весь экран */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* 3. Порталы в ряд (расставлены по центру) */
+        .portals-container {
+            position: fixed;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: row;
+            gap: 100px;
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 95vw;
+        }
+
+        .portal-card {
+            flex-shrink: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Первый портал (caps.png) — Крышка */
+        .portal-card.card-1 {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Второй портал (caps2.png) — Насос (увеличен пропорционально двери) */
+        .portal-card.card-2 {
+            width: 210px;
+            height: 315px;
+        }
+
+        /* Третий портал (caps3.png) — Дверь */
+        .portal-card.card-3 {
+            width: 170px;
+            height: 255px;
+        }
+
+        .portal-card.no-click {
+            cursor: default;
+        }
+
+        .portal-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: none;
+        }
+
+        /* 4. Иконка Glock19 (Soundcloud) */
+        .sc-link-box {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            width: 100px;
+            height: 100px;
+            display: block;
+            background: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            overflow: visible;
+        }
+
+        .sc-link-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        /* 5. Модальное окно для обычных видео */
+        #video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #video-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            cursor: default;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* 6. Режим "

@@ -71,39 +71,14 @@
             width: 100%;
             height: 100%;
             position: relative;
-            opacity: 0;
+            opacity: 0; /* Изначально скрыт для резкого появления */
         }
 
-        /* МЯГКАЯ И ПЛАВНАЯ АНИМАЦИЯ ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT ON) */
-        #site-wrapper.tv-on {
-            animation: tvTurnOn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transform-origin: center center;
+        #site-wrapper.visible {
+            opacity: 1; /* Резкое появление */
         }
 
-        @keyframes tvTurnOn {
-            0% {
-                transform: scale(0, 0.001);
-                filter: brightness(5) contrast(200%);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1, 0.003); /* Узкая яркая линия по центру */
-                filter: brightness(4) contrast(150%);
-                opacity: 1;
-            }
-            75% {
-                transform: scale(1, 0.3); /* Плавное вертикальное раскрытие */
-                filter: brightness(2);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1, 1);
-                filter: brightness(1) contrast(100%);
-                opacity: 1;
-            }
-        }
-
-        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT OFF) */
+        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (оставлена по умолчанию для красивого финала) */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -124,15 +99,14 @@
             }
         }
 
-        /* 1. Кнопка выключения на самом сайте */
+        /* 1. Кнопка выключения в левом верхнем углу */
         .power-btn {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 25px;
+            left: 25px;
             z-index: 20;
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -309,7 +283,7 @@
     <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
 
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ НА САЙТЕ -->
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ В ЛЕВОМ ВЕРХНЕМ УГЛУ -->
         <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
             <img src="power.png" alt="Power Off">
         </button>
@@ -368,11 +342,12 @@
                 startSound.play().catch(() => {});
             }
 
+            // Убираем стартовый экран
             startScreen.classList.add('hidden');
 
-            // 2 секунды паузы в темноте, затем мягкое включение телевизора
+            // 1 секунда паузы в темноте, затем резкое появление сайта
             setTimeout(() => {
-                siteWrapper.classList.add('tv-on');
+                siteWrapper.classList.add('visible');
 
                 if (bgVideo) {
                     bgVideo.muted = false;
@@ -380,7 +355,7 @@
                         console.log("Ошибка запуска фона:", err);
                     });
                 }
-            }, 2000);
+            }, 1000); // 1000 мс = 1 секунда
         }
 
         function openVideo(videoSrc) {
@@ -405,7 +380,6 @@
             isShutdown = true;
 
             if (btnSound) btnSound.play().catch(() => {});
-            siteWrapper.classList.remove('tv-on');
             siteWrapper.classList.add('tv-off');
 
             setTimeout(() => {

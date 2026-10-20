@@ -19,13 +19,14 @@
             font-family: monospace;
         }
 
+        /* Основной контейнер всего сайта */
         #site-wrapper {
             width: 100%;
             height: 100%;
             position: relative;
         }
 
-        /* Кнопка выключения */
+        /* 1. Кнопка выключения сверху по центру */
         .power-btn {
             position: fixed;
             top: 25px;
@@ -54,7 +55,7 @@
             filter: brightness(1.2);
         }
 
-        /* Фоновое видео */
+        /* 2. Фоновое видео на весь экран */
         #bg-video {
             position: fixed;
             top: 0;
@@ -73,7 +74,7 @@
             pointer-events: none;
         }
 
-        /* Контейнер порталов */
+        /* 3. Порталы в ряд (сильно раздвинуты) */
         .portals-container {
             position: fixed;
             top: 42%;
@@ -81,10 +82,10 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 80px;
+            gap: 100px; /* Увеличено расстояние между порталами */
             z-index: 10;
             align-items: center;
-            justify-content: center;
+            justify-content: space-evenly;
             width: 100%;
             max-width: 95vw;
         }
@@ -98,17 +99,14 @@
             overflow: hidden;
         }
 
-        /* Размеры карточек */
+        /* Первый портал (caps.png) — пропорции 600x600 (квадрат) */
         .portal-card.card-1 {
-            width: 200px;
-            height: 200px;
+            width: 240px;
+            height: 240px;
         }
 
-        .portal-card.card-2 {
-            width: 210px;
-            height: 315px;
-        }
-
+        /* Второй и третий порталы (прямоугольные) */
+        .portal-card.card-2, 
         .portal-card.card-3 {
             width: 170px;
             height: 255px;
@@ -121,12 +119,12 @@
         .portal-card img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             display: block;
             filter: none;
         }
 
-        /* Иконка Soundcloud */
+        /* 4. Иконка Glock19 (Soundcloud) */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -138,6 +136,8 @@
             display: block;
             background: transparent;
             box-shadow: none;
+            border-radius: 0;
+            overflow: visible;
         }
 
         .sc-link-box img {
@@ -148,7 +148,7 @@
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
-        /* Модалка для видео */
+        /* 5. Модальное окно для обычных видео */
         #video-modal {
             position: fixed;
             inset: 0;
@@ -178,7 +178,7 @@
             border-radius: 8px;
         }
 
-        /* Режим выключения */
+        /* 6. Режим "Выключено" — Незакрываемое видео на весь экран */
         #shutdown-screen {
             position: fixed;
             inset: 0;
@@ -197,4 +197,133 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block
+            display: block;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ВЕСЬ ИНТЕРФЕЙС САЙТА -->
+    <div id="site-wrapper">
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ СВЕРХУ -->
+        <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
+            <img src="power.png" alt="Power Off">
+        </button>
+
+        <!-- ФОНОВОЕ ВИДЕО -->
+        <video id="bg-video" autoplay muted loop playsinline>
+            <source src="background.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+
+        <!-- ТРИ ПОРТАЛА В РЯД -->
+        <div class="portals-container">
+            <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
+                <img src="caps.png" alt="Edit 1">
+            </div>
+            <div class="portal-card card-2" onclick="openVideo('edits2.mp4')">
+                <img src="caps2.png" alt="Edit 2">
+            </div>
+            <div class="portal-card card-3 no-click">
+                <img src="caps3.png" alt="Edit 3">
+            </div>
+        </div>
+
+        <!-- ИКОНКА GLOCK19 (SOUNDCLOUD) -->
+        <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
+            <img src="glock19.png" alt="Glock19">
+        </a>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО С ОБЫЧНЫМ ВИДЕО -->
+    <div id="video-modal" onclick="closeVideo()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <video id="popup-player" controls preload="auto" playsinline>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- ФИНАЛЬНЫЙ НЕЗАКРЫВАЕМЫЙ ЭКРАН ВЫКЛЮЧЕНИЯ (OFF.MP4) -->
+    <div id="shutdown-screen">
+        <video id="shutdown-video" loop playsinline>
+            <source src="off.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- ЗВУК ЩЕЛЧКА КНОПКИ -->
+    <audio id="btn-sound" src="button.mp3" preload="auto"></audio>
+
+    <script>
+        const modal = document.getElementById('video-modal');
+        const player = document.getElementById('popup-player');
+        const bgVideo = document.getElementById('bg-video');
+        const siteWrapper = document.getElementById('site-wrapper');
+        const shutdownScreen = document.getElementById('shutdown-screen');
+        const shutdownVideo = document.getElementById('shutdown-video');
+        const btnSound = document.getElementById('btn-sound');
+
+        let isShutdown = false;
+
+        // Включение звука фона по первому клику
+        window.addEventListener('click', () => {
+            if (bgVideo.muted && !isShutdown) {
+                bgVideo.muted = false;
+            }
+        }, { once: true });
+
+        function openVideo(videoSrc) {
+            if (isShutdown) return;
+            bgVideo.pause();
+            player.src = videoSrc;
+            player.load();
+            modal.classList.add('active');
+            player.play().catch(() => {});
+        }
+
+        function closeVideo() {
+            if (isShutdown) return;
+            player.pause();
+            player.src = '';
+            modal.classList.remove('active');
+            bgVideo.play().catch(() => {});
+        }
+
+        // РЕЖИМ ВЫКЛЮЧЕНИЯ САЙТА С ЗАДЕРЖКОЙ В 1 СЕКУНДУ
+        function triggerShutdown(e) {
+            if (e) e.stopPropagation();
+            isShutdown = true;
+
+            // 1. Проигрываем звук кнопки и сразу гасим интерфейс (черный экран)
+            btnSound.play().catch(() => {});
+            bgVideo.pause();
+            player.pause();
+            siteWrapper.style.display = 'none';
+            modal.classList.remove('active');
+
+            // 2. Включаем пустой черный экран с задержкой перед стартом off.mp4
+            shutdownScreen.classList.add('active');
+
+            setTimeout(() => {
+                shutdownVideo.currentTime = 0;
+                shutdownVideo.play().catch(err => {
+                    console.log("Ошибка воспроизведения off.mp4:", err);
+                });
+            }, 1000); // Задержка 1000мс = 1 секунда
+        }
+
+        // БЛОКИРОВКА ESC
+        document.addEventListener('keydown', (e) => {
+            if (isShutdown) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

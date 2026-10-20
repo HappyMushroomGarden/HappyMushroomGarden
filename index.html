@@ -38,7 +38,7 @@
             pointer-events: none;
         }
 
-        /* 2. Три портала в ряд по центру */
+        /* 2. Три КВАДРАТНЫХ портала в ряд по центру */
         .portals-container {
             position: fixed;
             top: 50%;
@@ -54,8 +54,8 @@
         }
 
         .portal-card {
-            width: min(300px, 28vw);
-            height: min(450px, 42vw);
+            width: min(320px, 28vw);
+            height: min(320px, 28vw); /* Сделали квадратными */
             cursor: pointer;
             transition: transform 0.2s ease, filter 0.2s ease;
             display: flex;
@@ -116,18 +116,14 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.95);
             z-index: 50;
-            display: flex;
+            display: none; /* Используем display для надежности */
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
             cursor: pointer;
         }
 
         #video-modal.active {
-            opacity: 1;
-            pointer-events: auto;
+            display: flex;
         }
 
         .modal-content {
@@ -155,10 +151,10 @@
 
     <!-- ТРИ ПОРТАЛА В РЯД ПО ЦЕНТРУ -->
     <div class="portals-container">
-        <div class="portal-card" onclick="openVideo(event, 'edits.mp4')">
+        <div class="portal-card" onclick="openVideo('edits.mp4')">
             <img src="caps.png" alt="Edit 1">
         </div>
-        <div class="portal-card" onclick="openVideo(event, 'edits2.mp4')">
+        <div class="portal-card" onclick="openVideo('edits2.mp4')">
             <img src="caps2.png" alt="Edit 2">
         </div>
         <div class="portal-card no-click">
@@ -174,3 +170,54 @@
     <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО-ЭДИТОМ -->
     <div id="video-modal" onclick="closeVideo()">
         <div class="modal-content" onclick="event.stopPropagation()">
+            <video id="popup-player" controls preload="auto" playsinline>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('video-modal');
+        const player = document.getElementById('popup-player');
+        const bgVideo = document.getElementById('bg-video');
+
+        // Включение звука фона по первому клику
+        document.body.addEventListener('click', () => {
+            if (bgVideo.muted) {
+                bgVideo.muted = false;
+            }
+        }, { once: true });
+
+        function openVideo(videoSrc) {
+            if (bgVideo.muted) {
+                bgVideo.muted = false;
+            }
+
+            bgVideo.pause();
+            
+            // Задаем источник и запускаем
+            player.src = videoSrc;
+            player.load();
+            modal.classList.add('active');
+            
+            player.play().catch(err => {
+                console.log("Ошибка воспроизведения видео:", err);
+            });
+        }
+
+        function closeVideo() {
+            player.pause();
+            player.src = '';
+            modal.classList.remove('active');
+            bgVideo.play().catch(() => {});
+        }
+
+        // Закрытие по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

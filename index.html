@@ -28,39 +28,44 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
         }
 
         #start-screen.hidden {
             display: none;
         }
 
-        /* Стартовая кнопка без обрезки (полная картинка) */
-        .start-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            max-width: 80vw;
-            max-height: 80vh;
+        /* Контейнер картинки: фиксированная глухая картинка без подсветки и подъема */
+        .start-card {
+            position: relative;
+            width: 90vw;
+            max-width: 450px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
-        .start-btn img {
+        .start-card img {
             width: 100%;
-            height: 100%;
-            max-width: 450px; /* Ограничение по ширине, чтобы смотрелось красиво */
-            object-fit: contain; /* Главное: картинка не обрезается */
+            height: auto;
+            object-fit: contain;
             display: block;
-            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.15));
+            pointer-events: none; /* Запрещаем клики и подсветку по всей картинке */
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
         }
 
-        .start-btn:hover {
-            transform: scale(1.03);
-            filter: brightness(1.15);
+        /* Кликабельная кнопка строго поверх круглой кнопки в центре (около 50% по вертикали и горизонтали) */
+        .start-click-area {
+            position: absolute;
+            top: 45%;
+            left: 45.5%;
+            width: 18%;
+            height: 14%;
+            border-radius: 50%;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+            z-index: 10;
         }
 
         #site-wrapper {
@@ -69,7 +74,31 @@
             position: relative;
         }
 
-        /* Эффект выключения старого телевизора */
+        /* АНИМАЦИЯ ВКЛЮЧЕНИЯ СТАРОГО ТЕЛЕВИЗОРА (CRT ON) */
+        #site-wrapper.tv-on {
+            animation: tvTurnOn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes tvTurnOn {
+            0% {
+                transform: scale(0, 0.005);
+                filter: brightness(3);
+                opacity: 0;
+            }
+            35% {
+                transform: scale(1, 0.005);
+                filter: brightness(2.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1, 1);
+                filter: brightness(1);
+                opacity: 1;
+            }
+        }
+
+        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ СТАРОГО ТЕЛЕВИЗОРА (CRT OFF) */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -90,7 +119,7 @@
             }
         }
 
-        /* 1. Кнопка выключения на сайте */
+        /* 1. Кнопка выключения на самом сайте */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -263,13 +292,16 @@
 </head>
 <body>
 
-    <!-- СТАРТОВЫЙ ТЁМНЫЙ ЭКРАН С ПОЛНОЙ КАРТИНКОЙ -->
+    <!-- СТАРТОВЫЙ ЭКРАН -->
     <div id="start-screen">
-        <button class="start-btn" onclick="startSite()">
+        <div class="start-card">
             <img src="start.png" alt="Ракеты на Америку">
-        </button>
+            <!-- Кнопка поверх переключателя в центре -->
+            <button class="start-click-area" onclick="startSite()" title="Нажать"></button>
+        </div>
     </div>
-    <!-- Звук для стартовой кнопки -->
+
+    <!-- Аудио для стартовой кнопки -->
     <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
 
     <div id="site-wrapper">
@@ -328,68 +360,17 @@
         let isShutdown = false;
 
         function startSite() {
+            // 1. Звук клика по стартовой кнопке
             if (startSound) {
                 startSound.play().catch(() => {});
             }
 
+            // 2. Скрываем стартовый экран (уходим в чистый тёмный экран)
             startScreen.classList.add('hidden');
 
-            if (bgVideo) {
-                bgVideo.muted = false;
-                bgVideo.play().catch(err => {
-                    console.log("Ошибка запуска фона:", err);
-                });
-            }
-        }
-
-        function openVideo(videoSrc) {
-            if (isShutdown) return;
-            if (bgVideo) bgVideo.pause();
-            player.src = videoSrc;
-            player.load();
-            modal.classList.add('active');
-            player.play().catch(() => {});
-        }
-
-        function closeVideo() {
-            if (isShutdown) return;
-            player.pause();
-            player.src = '';
-            modal.classList.remove('active');
-            if (bgVideo) bgVideo.play().catch(() => {});
-        }
-
-        function triggerShutdown(e) {
-            if (e) e.stopPropagation();
-            isShutdown = true;
-
-            if (btnSound) btnSound.play().catch(() => {});
-            siteWrapper.classList.add('tv-off');
-
+            // 3. Ровно 2 секунды пазы в темноте
             setTimeout(() => {
-                if (bgVideo) bgVideo.pause();
-                player.pause();
-                modal.classList.remove('active');
-                siteWrapper.style.display = 'none';
+                // 4. Появляется главная страница с эффектом включения старого телевизора
+                siteWrapper.classList.add('tv-on');
 
-                setTimeout(() => {
-                    shutdownScreen.classList.add('active');
-                    shutdownVideo.currentTime = 0;
-                    shutdownVideo.play().catch(() => {});
-                }, 1000);
-
-            }, 500);
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (isShutdown) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
-    </script>
-</body>
-</html>
+                if (bgVideo

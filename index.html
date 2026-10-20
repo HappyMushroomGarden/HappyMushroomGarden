@@ -55,7 +55,7 @@
 
         .portal-card {
             width: min(320px, 28vw);
-            height: min(320px, 28vw); /* Сделали квадратными */
+            height: min(320px, 28vw);
             cursor: pointer;
             transition: transform 0.2s ease, filter 0.2s ease;
             display: flex;
@@ -116,7 +116,7 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.95);
             z-index: 50;
-            display: none; /* Используем display для надежности */
+            display: none;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -143,8 +143,8 @@
 </head>
 <body>
 
-    <!-- ФОНОВОЕ ВИДЕО СО ЗВУКОМ -->
-    <video id="bg-video" autoplay muted loop playsinline>
+    <!-- ФОНОВОЕ ВИДЕО -->
+    <video id="bg-video" autoplay loop playsinline>
         <source src="background.mp4" type="video/mp4">
     </video>
     <div class="overlay"></div>
@@ -162,12 +162,12 @@
         </div>
     </div>
 
-    <!-- ТОЛЬКО ИКОНКА GLOCK19 (SOUNDCLOUD) -->
+    <!-- ИКОНКА GLOCK19 (SOUNDCLOUD) -->
     <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
         <img src="glock19.png" alt="Glock19">
     </a>
 
-    <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО-ЭДИТОМ -->
+    <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО -->
     <div id="video-modal" onclick="closeVideo()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <video id="popup-player" controls preload="auto" playsinline>
@@ -181,27 +181,22 @@
         const player = document.getElementById('popup-player');
         const bgVideo = document.getElementById('bg-video');
 
-        // Включение звука фона по первому клику
-        document.body.addEventListener('click', () => {
-            if (bgVideo.muted) {
-                bgVideo.muted = false;
+        // Гарантированное включение звука при первом же клике куда угодно
+        window.addEventListener('click', () => {
+            if (bgVideo.paused) {
+                bgVideo.play().catch(() => {});
             }
         }, { once: true });
 
         function openVideo(videoSrc) {
-            if (bgVideo.muted) {
-                bgVideo.muted = false;
-            }
-
             bgVideo.pause();
             
-            // Задаем источник и запускаем
             player.src = videoSrc;
             player.load();
             modal.classList.add('active');
             
             player.play().catch(err => {
-                console.log("Ошибка воспроизведения видео:", err);
+                console.log("Ошибка воспроизведения:", err);
             });
         }
 

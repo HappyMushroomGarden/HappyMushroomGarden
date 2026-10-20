@@ -38,15 +38,15 @@
             pointer-events: none;
         }
 
-        /* 2. Три КВАДРАТНЫХ портала в ряд по центру */
+        /* 2. Три вертикальных портала: повыше, поменьше и подальше друг от друга */
         .portals-container {
             position: fixed;
-            top: 50%;
+            top: 42%; /* Чуть повыше центра */
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 30px;
+            gap: 50px; /* Больше расстояния между ними */
             z-index: 10;
             align-items: center;
             justify-content: center;
@@ -54,8 +54,8 @@
         }
 
         .portal-card {
-            width: min(320px, 28vw);
-            height: min(320px, 28vw);
+            width: min(220px, 22vw);   /* Уменьшенная ширина */
+            height: min(330px, 33vw);  /* Увеличенная высота (вертикальные пропорции) */
             cursor: pointer;
             transition: transform 0.2s ease, filter 0.2s ease;
             display: flex;
@@ -81,7 +81,7 @@
             filter: brightness(1.2);
         }
 
-        /* 3. Иконка Glock19 (Soundcloud) */
+        /* 3. Иконка Glock19 (Soundcloud) строго по центру снизу */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -149,7 +149,7 @@
     </video>
     <div class="overlay"></div>
 
-    <!-- ТРИ ПОРТАЛА В РЯД ПО ЦЕНТРУ -->
+    <!-- ТРИ ПОРТАЛА В РЯД -->
     <div class="portals-container">
         <div class="portal-card" onclick="openVideo('edits.mp4')">
             <img src="caps.png" alt="Edit 1">
@@ -181,7 +181,7 @@
         const player = document.getElementById('popup-player');
         const bgVideo = document.getElementById('bg-video');
 
-        // Гарантированное включение звука при первом же клике куда угодно
+        // Включение звука фона по первому клику
         window.addEventListener('click', () => {
             if (bgVideo.paused) {
                 bgVideo.play().catch(() => {});

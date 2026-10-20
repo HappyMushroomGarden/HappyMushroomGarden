@@ -26,15 +26,15 @@
             position: relative;
         }
 
-        /* 1. Кнопка выключения сверху по центру (увеличена) */
+        /* 1. Кнопка выключения сверху по центру */
         .power-btn {
             position: fixed;
             top: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 20;
-            width: 90px;  /* Сделал заметно больше */
-            height: 90px; /* Сделал заметно больше */
+            width: 90px;
+            height: 90px;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -194,7 +194,7 @@
 
     <!-- ВЕСЬ ИНТЕРФЕЙС САЙТА -->
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ СВЕРХУ (УВЕЛИЧЕНА) -->
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ СВЕРХУ -->
         <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
             <img src="power.png" alt="Power Off">
         </button>
@@ -278,26 +278,27 @@
             bgVideo.play().catch(() => {});
         }
 
-        // РЕЖИМ ВЫКЛЮЧЕНИЯ САЙТА
+        // РЕЖИМ ВЫКЛЮЧЕНИЯ САЙТА С ЗАДЕРЖКОЙ В 1 СЕКУНДУ
         function triggerShutdown(e) {
             if (e) e.stopPropagation();
             isShutdown = true;
 
-            // 1. Проигрываем звук кнопки
+            // 1. Проигрываем звук кнопки и сразу гасим интерфейс (черный экран)
             btnSound.play().catch(() => {});
-
-            // 2. Останавливаем и прячем все остальные видео и элементы
             bgVideo.pause();
             player.pause();
             siteWrapper.style.display = 'none';
             modal.classList.remove('active');
 
-            // 3. Активируем экран с видео off.mp4
+            // 2. Включаем пустой черный экран с задержкой перед стартом off.mp4
             shutdownScreen.classList.add('active');
-            shutdownVideo.currentTime = 0;
-            shutdownVideo.play().catch(err => {
-                console.log("Ошибка воспроизведения off.mp4:", err);
-            });
+
+            setTimeout(() => {
+                shutdownVideo.currentTime = 0;
+                shutdownVideo.play().catch(err => {
+                    console.log("Ошибка воспроизведения off.mp4:", err);
+                });
+            }, 1000); // Задержка 1000мс = 1 секунда
         }
 
         // БЛОКИРОВКА ESC

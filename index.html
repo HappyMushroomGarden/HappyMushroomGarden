@@ -25,7 +25,28 @@
             position: relative;
         }
 
-        /* 1. Кнопка выключения сверху по центру (увеличена до 120px) */
+        /* Эффект выключения старого телевизора (TV Turn Off / CRT Off) */
+        #site-wrapper.tv-off {
+            animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes tvShutdown {
+            0% {
+                transform: scale(1, 1);
+                filter: brightness(1);
+            }
+            40% {
+                transform: scale(1, 0.005);
+                filter: brightness(2); /* Небольшая вспышка по центру */
+            }
+            100% {
+                transform: scale(0, 0);
+                filter: brightness(0);
+            }
+        }
+
+        /* 1. Кнопка выключения */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -98,19 +119,19 @@
             overflow: hidden;
         }
 
-        /* Скорректированные индивидуальные пропорции карточек */
+        /* Размеры карточек */
         .portal-card.card-1 {
-            width: 260px;  /* Увеличенная крупная крышка */
+            width: 260px;
             height: 260px;
         }
 
         .portal-card.card-2 {
-            width: 220px;  /* Полноразмерный насос */
+            width: 220px;
             height: 330px;
         }
 
         .portal-card.card-3 {
-            width: 200px;  /* Полноценная дверь без сжатия */
+            width: 200px;
             height: 320px;
         }
 
@@ -126,7 +147,7 @@
             filter: none;
         }
 
-        /* Иконка Soundcloud снизу */
+        /* Иконка Soundcloud */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -178,7 +199,7 @@
             border-radius: 8px;
         }
 
-        /* Режим выключения */
+        /* Экран выключения с off.mp4 */
         #shutdown-screen {
             position: fixed;
             inset: 0;
@@ -205,18 +226,15 @@
 <body>
 
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ (КРУПНАЯ) -->
         <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
             <img src="power.png" alt="Power Off">
         </button>
 
-        <!-- ФОНОВОЕ ВИДЕО -->
         <video id="bg-video" autoplay muted loop playsinline>
             <source src="background.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
 
-        <!-- ТРИ ПОРТАЛА В РЯД -->
         <div class="portals-container">
             <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
                 <img src="caps.png" alt="Edit 1">
@@ -229,20 +247,17 @@
             </div>
         </div>
 
-        <!-- ИКОНКА SOUNDCLOUD (GLOCK19) -->
         <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
             <img src="glock19.png" alt="Glock19">
         </a>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО -->
     <div id="video-modal" onclick="closeVideo()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <video id="popup-player" controls preload="auto" playsinline></video>
         </div>
     </div>
 
-    <!-- ЭКРАН ВЫКЛЮЧЕНИЯ -->
     <div id="shutdown-screen">
         <video id="shutdown-video" loop playsinline>
             <source src="off.mp4" type="video/mp4">
@@ -285,33 +300,15 @@
             if (bgVideo) bgVideo.play().catch(() => {});
         }
 
+        // ВЫКЛЮЧЕНИЕ С ЭФФЕКТОМ ТЕЛЕВИЗОРА
         function triggerShutdown(e) {
             if (e) e.stopPropagation();
             isShutdown = true;
 
+            // 1. Звук клика
             if (btnSound) btnSound.play().catch(() => {});
-            if (bgVideo) bgVideo.pause();
-            player.pause();
-            
-            siteWrapper.style.display = 'none';
-            modal.classList.remove('active');
-            shutdownScreen.classList.add('active');
 
-            setTimeout(() => {
-                shutdownVideo.currentTime = 0;
-                shutdownVideo.play().catch(() => {});
-            }, 1000);
-        }
+            // 2. Запускаем анимацию выключения ТВ (0.5 сек)
+            siteWrapper.classList.add('tv-off');
 
-        document.addEventListener('keydown', (e) => {
-            if (isShutdown) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
-    </script>
-</body>
-</html>
+            // 3. Через 0.5 сек останавливаем фон, убираем весь интерфейс и держим ТЁМНЫЙ ЭКРАН 1 секунду

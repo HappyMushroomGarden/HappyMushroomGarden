@@ -38,7 +38,7 @@
             pointer-events: none;
         }
 
-        /* 2. Три вертикальных портала в ряд */
+        /* 2. Три уменьшенных портала на увеличенном расстоянии друг от друга */
         .portals-container {
             position: fixed;
             top: 42%;
@@ -46,7 +46,7 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 50px;
+            gap: 90px; /* Увеличил отступ между порталами */
             z-index: 10;
             align-items: center;
             justify-content: center;
@@ -54,8 +54,8 @@
         }
 
         .portal-card {
-            width: min(220px, 22vw);
-            height: min(330px, 33vw);
+            width: min(160px, 16vw);   /* Ещё уменьшил ширину */
+            height: min(240px, 24vw);  /* Ещё уменьшил высоту */
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -144,64 +144,4 @@
             <img src="caps.png" alt="Edit 1">
         </div>
         <div class="portal-card" onclick="openVideo('edits2.mp4')">
-            <img src="caps2.png" alt="Edit 2">
-        </div>
-        <div class="portal-card no-click">
-            <img src="caps3.png" alt="Edit 3">
-        </div>
-    </div>
-
-    <!-- ИКОНКА GLOCK19 (SOUNDCLOUD) -->
-    <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="sc-link-box" title="Soundcloud">
-        <img src="glock19.png" alt="Glock19">
-    </a>
-
-    <!-- МОДАЛЬНОЕ ОКНО С ВИДЕО -->
-    <div id="video-modal" onclick="closeVideo()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <video id="popup-player" controls preload="auto" playsinline>
-                Your browser does not support the video tag.
-            </video>
-        </div>
-    </div>
-
-    <script>
-        const modal = document.getElementById('video-modal');
-        const player = document.getElementById('popup-player');
-        const bgVideo = document.getElementById('bg-video');
-
-        // Включение звука фона по первому клику
-        window.addEventListener('click', () => {
-            if (bgVideo.paused) {
-                bgVideo.play().catch(() => {});
-            }
-        }, { once: true });
-
-        function openVideo(videoSrc) {
-            bgVideo.pause();
-            
-            player.src = videoSrc;
-            player.load();
-            modal.classList.add('active');
-            
-            player.play().catch(err => {
-                console.log("Ошибка воспроизведения:", err);
-            });
-        }
-
-        function closeVideo() {
-            player.pause();
-            player.src = '';
-            modal.classList.remove('active');
-            bgVideo.play().catch(() => {});
-        }
-
-        // Закрытие по ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
-    </script>
-</body>
-</html>
+            <img src="caps

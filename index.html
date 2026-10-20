@@ -19,6 +19,50 @@
             font-family: monospace;
         }
 
+        /* 0. СТАРТОВЫЙ ЭКРАН-ЗАГЛУШКА */
+        #start-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #start-screen.hidden {
+            display: none;
+        }
+
+        /* Стартовая кнопка без обрезки (полная картинка) */
+        .start-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            max-width: 80vw;
+            max-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .start-btn img {
+            width: 100%;
+            height: 100%;
+            max-width: 450px; /* Ограничение по ширине, чтобы смотрелось красиво */
+            object-fit: contain; /* Главное: картинка не обрезается */
+            display: block;
+            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.15));
+        }
+
+        .start-btn:hover {
+            transform: scale(1.03);
+            filter: brightness(1.15);
+        }
+
         #site-wrapper {
             width: 100%;
             height: 100%;
@@ -46,7 +90,7 @@
             }
         }
 
-        /* 1. Кнопка выключения (без увеличения и ховера) */
+        /* 1. Кнопка выключения на сайте */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -219,12 +263,22 @@
 </head>
 <body>
 
+    <!-- СТАРТОВЫЙ ТЁМНЫЙ ЭКРАН С ПОЛНОЙ КАРТИНКОЙ -->
+    <div id="start-screen">
+        <button class="start-btn" onclick="startSite()">
+            <img src="start.png" alt="Ракеты на Америку">
+        </button>
+    </div>
+    <!-- Звук для стартовой кнопки -->
+    <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
+
     <div id="site-wrapper">
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ НА САЙТЕ -->
         <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
             <img src="power.png" alt="Power Off">
         </button>
 
-        <video id="bg-video" autoplay muted loop playsinline>
+        <video id="bg-video" loop playsinline>
             <source src="background.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
@@ -261,6 +315,8 @@
     <audio id="btn-sound" src="button.mp3" preload="auto"></audio>
 
     <script>
+        const startScreen = document.getElementById('start-screen');
+        const startSound = document.getElementById('start-sound');
         const modal = document.getElementById('video-modal');
         const player = document.getElementById('popup-player');
         const bgVideo = document.getElementById('bg-video');
@@ -271,12 +327,20 @@
 
         let isShutdown = false;
 
-        // Включение звука фона по первому клику на странице
-        window.addEventListener('click', () => {
-            if (bgVideo && bgVideo.muted && !isShutdown) {
-                bgVideo.muted = false;
+        function startSite() {
+            if (startSound) {
+                startSound.play().catch(() => {});
             }
-        }, { once: true });
+
+            startScreen.classList.add('hidden');
+
+            if (bgVideo) {
+                bgVideo.muted = false;
+                bgVideo.play().catch(err => {
+                    console.log("Ошибка запуска фона:", err);
+                });
+            }
+        }
 
         function openVideo(videoSrc) {
             if (isShutdown) return;
@@ -299,10 +363,7 @@
             if (e) e.stopPropagation();
             isShutdown = true;
 
-            // Звук кнопки
             if (btnSound) btnSound.play().catch(() => {});
-
-            // Анимация выключения ТВ
             siteWrapper.classList.add('tv-off');
 
             setTimeout(() => {
@@ -311,7 +372,6 @@
                 modal.classList.remove('active');
                 siteWrapper.style.display = 'none';
 
-                // Ровно 1 секунда тёмного экрана перед запуском off.mp4
                 setTimeout(() => {
                     shutdownScreen.classList.add('active');
                     shutdownVideo.currentTime = 0;

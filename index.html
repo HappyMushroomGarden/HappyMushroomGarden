@@ -74,7 +74,7 @@
             pointer-events: none;
         }
 
-        /* 3. Три портала в ряд по центру */
+        /* 3. Порталы в ряд (сильно раздвинуты) */
         .portals-container {
             position: fixed;
             top: 42%;
@@ -82,22 +82,34 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 60px;
+            gap: 100px; /* Увеличено расстояние между порталами */
             z-index: 10;
             align-items: center;
-            justify-content: center;
+            justify-content: space-evenly;
             width: 100%;
+            max-width: 95vw;
         }
 
         .portal-card {
-            width: 170px;
-            height: 255px;
             flex-shrink: 0;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+        }
+
+        /* Первый портал (caps.png) — пропорции 600x600 (квадрат) */
+        .portal-card.card-1 {
+            width: 240px;
+            height: 240px;
+        }
+
+        /* Второй и третий порталы (прямоугольные) */
+        .portal-card.card-2, 
+        .portal-card.card-3 {
+            width: 170px;
+            height: 255px;
         }
 
         .portal-card.no-click {
@@ -207,13 +219,13 @@
 
         <!-- ТРИ ПОРТАЛА В РЯД -->
         <div class="portals-container">
-            <div class="portal-card" onclick="openVideo('edits.mp4')">
+            <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
                 <img src="caps.png" alt="Edit 1">
             </div>
-            <div class="portal-card" onclick="openVideo('edits2.mp4')">
+            <div class="portal-card card-2" onclick="openVideo('edits2.mp4')">
                 <img src="caps2.png" alt="Edit 2">
             </div>
-            <div class="portal-card no-click">
+            <div class="portal-card card-3 no-click">
                 <img src="caps3.png" alt="Edit 3">
             </div>
         </div>
@@ -275,43 +287,4 @@
             player.pause();
             player.src = '';
             modal.classList.remove('active');
-            bgVideo.play().catch(() => {});
-        }
-
-        // РЕЖИМ ВЫКЛЮЧЕНИЯ САЙТА С ЗАДЕРЖКОЙ В 1 СЕКУНДУ
-        function triggerShutdown(e) {
-            if (e) e.stopPropagation();
-            isShutdown = true;
-
-            // 1. Проигрываем звук кнопки и сразу гасим интерфейс (черный экран)
-            btnSound.play().catch(() => {});
-            bgVideo.pause();
-            player.pause();
-            siteWrapper.style.display = 'none';
-            modal.classList.remove('active');
-
-            // 2. Включаем пустой черный экран с задержкой перед стартом off.mp4
-            shutdownScreen.classList.add('active');
-
-            setTimeout(() => {
-                shutdownVideo.currentTime = 0;
-                shutdownVideo.play().catch(err => {
-                    console.log("Ошибка воспроизведения off.mp4:", err);
-                });
-            }, 1000); // Задержка 1000мс = 1 секунда
-        }
-
-        // БЛОКИРОВКА ESC
-        document.addEventListener('keydown', (e) => {
-            if (isShutdown) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
-    </script>
-</body>
-</html>
+            bgVideo.

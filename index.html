@@ -38,15 +38,15 @@
             pointer-events: none;
         }
 
-        /* 2. Три вертикальных портала: повыше, поменьше и подальше друг от друга */
+        /* 2. Три вертикальных портала в ряд */
         .portals-container {
             position: fixed;
-            top: 42%; /* Чуть повыше центра */
+            top: 42%;
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 50px; /* Больше расстояния между ними */
+            gap: 50px;
             z-index: 10;
             align-items: center;
             justify-content: center;
@@ -54,14 +54,14 @@
         }
 
         .portal-card {
-            width: min(220px, 22vw);   /* Уменьшенная ширина */
-            height: min(330px, 33vw);  /* Увеличенная высота (вертикальные пропорции) */
+            width: min(220px, 22vw);
+            height: min(330px, 33vw);
             cursor: pointer;
-            transition: transform 0.2s ease, filter 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            /* Убраны любые переходы, анимации и эффекты при наведении */
         }
 
         .portal-card.no-click {
@@ -76,12 +76,7 @@
             filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
         }
 
-        .portal-card:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-
-        /* 3. Иконка Glock19 (Soundcloud) строго по центру снизу */
+        /* 3. Иконка Glock19 (Soundcloud) */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -95,7 +90,6 @@
             box-shadow: none;
             border-radius: 0;
             overflow: visible;
-            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
         .sc-link-box img {
@@ -104,10 +98,6 @@
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
-        }
-
-        .sc-link-box:hover {
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
         }
 
         /* 4. Модальное окно для видео */

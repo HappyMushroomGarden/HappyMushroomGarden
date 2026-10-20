@@ -34,7 +34,6 @@
             display: none !important;
         }
 
-        /* Контейнер картинки: фиксированная карточка без подсветки и без реакций на наведение */
         .start-card {
             position: relative;
             width: 90vw;
@@ -53,7 +52,6 @@
             filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
         }
 
-        /* Невидимая кликабельная зона ровно над кнопкой в центре */
         .start-click-area {
             position: absolute;
             top: 42%;
@@ -76,31 +74,36 @@
             opacity: 0;
         }
 
-        /* АНИМАЦИЯ ВКЛЮЧЕНИЯ СТАРОГО ТЕЛЕВИЗОРА (CRT ON) */
+        /* МЯГКАЯ И ПЛАВНАЯ АНИМАЦИЯ ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT ON) */
         #site-wrapper.tv-on {
-            animation: tvTurnOn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            animation: tvTurnOn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transform-origin: center center;
         }
 
         @keyframes tvTurnOn {
             0% {
-                transform: scale(0, 0.005);
-                filter: brightness(3);
+                transform: scale(0, 0.001);
+                filter: brightness(5) contrast(200%);
                 opacity: 0;
             }
-            35% {
-                transform: scale(1, 0.005);
-                filter: brightness(2.5);
+            50% {
+                transform: scale(1, 0.003); /* Узкая яркая линия по центру */
+                filter: brightness(4) contrast(150%);
+                opacity: 1;
+            }
+            75% {
+                transform: scale(1, 0.3); /* Плавное вертикальное раскрытие */
+                filter: brightness(2);
                 opacity: 1;
             }
             100% {
                 transform: scale(1, 1);
-                filter: brightness(1);
+                filter: brightness(1) contrast(100%);
                 opacity: 1;
             }
         }
 
-        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ СТАРОГО ТЕЛЕВИЗОРА (CRT OFF) */
+        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT OFF) */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -298,7 +301,6 @@
     <div id="start-screen">
         <div class="start-card">
             <img src="start.png" alt="Ракеты на Америку">
-            <!-- Кнопка выверена ровно вокруг металического переключателя в центре -->
             <button class="start-click-area" onclick="startSite()" title="Нажать"></button>
         </div>
     </div>
@@ -362,17 +364,14 @@
         let isShutdown = false;
 
         function startSite() {
-            // 1. Проигрываем звук кнопки
             if (startSound) {
                 startSound.play().catch(() => {});
             }
 
-            // 2. Скрываем стартовый экран (пауза в темноте)
             startScreen.classList.add('hidden');
 
-            // 3. Держим тёмный экран 2 секунды
+            // 2 секунды паузы в темноте, затем мягкое включение телевизора
             setTimeout(() => {
-                // 4. Появляется главная страница с эффектом включения ТВ
                 siteWrapper.classList.add('tv-on');
 
                 if (bgVideo) {
@@ -381,7 +380,7 @@
                         console.log("Ошибка запуска фона:", err);
                     });
                 }
-            }, 2000); // 2000 мс = 2 секунды
+            }, 2000);
         }
 
         function openVideo(videoSrc) {

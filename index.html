@@ -19,14 +19,13 @@
             font-family: monospace;
         }
 
-        /* Основной контейнер всего сайта */
         #site-wrapper {
             width: 100%;
             height: 100%;
             position: relative;
         }
 
-        /* 1. Кнопка выключения сверху по центру */
+        /* Кнопка выключения */
         .power-btn {
             position: fixed;
             top: 25px;
@@ -55,7 +54,7 @@
             filter: brightness(1.2);
         }
 
-        /* 2. Фоновое видео на весь экран */
+        /* Фоновое видео */
         #bg-video {
             position: fixed;
             top: 0;
@@ -74,7 +73,7 @@
             pointer-events: none;
         }
 
-        /* 3. Порталы в ряд (расставлены по центру) */
+        /* Контейнер порталов */
         .portals-container {
             position: fixed;
             top: 42%;
@@ -82,7 +81,7 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 100px;
+            gap: 80px;
             z-index: 10;
             align-items: center;
             justify-content: center;
@@ -99,19 +98,17 @@
             overflow: hidden;
         }
 
-        /* Первый портал (caps.png) — Крышка */
+        /* Размеры карточек */
         .portal-card.card-1 {
             width: 200px;
             height: 200px;
         }
 
-        /* Второй портал (caps2.png) — Насос (увеличен пропорционально двери) */
         .portal-card.card-2 {
             width: 210px;
             height: 315px;
         }
 
-        /* Третий портал (caps3.png) — Дверь */
         .portal-card.card-3 {
             width: 170px;
             height: 255px;
@@ -129,7 +126,7 @@
             filter: none;
         }
 
-        /* 4. Иконка Glock19 (Soundcloud) */
+        /* Иконка Soundcloud */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -141,8 +138,6 @@
             display: block;
             background: transparent;
             box-shadow: none;
-            border-radius: 0;
-            overflow: visible;
         }
 
         .sc-link-box img {
@@ -153,7 +148,7 @@
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
-        /* 5. Модальное окно для обычных видео */
+        /* Модалка для видео */
         #video-modal {
             position: fixed;
             inset: 0;
@@ -183,4 +178,23 @@
             border-radius: 8px;
         }
 
-        /* 6. Режим "
+        /* Режим выключения */
+        #shutdown-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #shutdown-screen.active {
+            display: block;
+        }
+
+        #shutdown-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block

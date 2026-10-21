@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links | HappyMushroomGarden</title>
+    <title>HappyKinderGarten</title>
     <style>
         * {
             box-sizing: border-box;
@@ -80,7 +80,6 @@
         .link-card {
             display: block;
             text-decoration: none;
-            /* Без эффектов увеличения и подсветки */
         }
 
         /* Настройки размеров карточек */
@@ -146,7 +145,7 @@
     </a>
 
     <!-- Фоновое видео -->
-    <video id="bg-video" autoplay loop muted playsinline>
+    <video id="bg-video" loop playsinline autoplay>
         <source src="links-bg.mp4" type="video/mp4">
     </video>
     <div class="overlay"></div>
@@ -170,14 +169,20 @@
     </div>
 
     <script>
-        // Гарантированный запуск фонового видео
         const bgVideo = document.getElementById('bg-video');
-        if (bgVideo) {
-            bgVideo.muted = true;
-            bgVideo.play().catch(err => {
-                console.log("Автозапуск заблокирован браузером:", err);
-            });
+
+        // Включение звука при первом клике/касании в любой точке экрана
+        function enableSound() {
+            if (bgVideo) {
+                bgVideo.muted = false;
+                bgVideo.play().catch(() => {});
+            }
+            document.removeEventListener('click', enableSound);
+            document.removeEventListener('touchstart', enableSound);
         }
+
+        document.addEventListener('click', enableSound);
+        document.addEventListener('touchstart', enableSound);
     </script>
 </body>
 </html>

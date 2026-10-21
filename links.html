@@ -38,14 +38,14 @@
             pointer-events: none;
         }
 
-        /* Картинка-кнопка "Назад" в левом верхнем углу */
+        /* Увеличенная картинка-кнопка "Назад" в левом верхнем углу (без title) */
         .back-btn {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 20;
-            width: 80px;
-            height: 80px;
+            width: 105px;
+            height: 105px;
             display: block;
             background: transparent;
             outline: none;
@@ -71,7 +71,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 25px;
+            gap: 28px;
             z-index: 10;
             width: 100%;
             max-width: 90vw;
@@ -82,29 +82,29 @@
             text-decoration: none;
         }
 
-        /* Настройки размеров карточек */
+        /* Увеличенные размеры карточек */
         .link-card.top-card img {
-            width: 220px;
+            width: 290px;
             height: auto;
-            max-height: 120px;
+            max-height: 160px;
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
         }
 
         .link-card.mid-card img {
-            width: 200px;
+            width: 260px;
             height: auto;
-            max-height: 110px;
+            max-height: 145px;
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
         }
 
         .link-card.bot-card img {
-            width: 180px;
+            width: 230px;
             height: auto;
-            max-height: 100px;
+            max-height: 130px;
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
@@ -117,20 +117,20 @@
             }
 
             .link-card.top-card img {
-                width: 170px;
+                width: 210px;
             }
 
             .link-card.mid-card img {
-                width: 150px;
+                width: 190px;
             }
 
             .link-card.bot-card img {
-                width: 130px;
+                width: 170px;
             }
 
             .back-btn {
-                width: 65px;
-                height: 65px;
+                width: 80px;
+                height: 80px;
                 top: 15px;
                 left: 15px;
             }
@@ -139,8 +139,8 @@
 </head>
 <body>
 
-    <!-- Картинка-кнопка Назад -->
-    <a href="index.html" class="back-btn" title="Назад">
+    <!-- Картинка-кнопка Назад (без всплывающей подсказки) -->
+    <a href="index.html" class="back-btn">
         <img src="back.png" alt="Back">
     </a>
 
@@ -171,7 +171,6 @@
     <script>
         const bgVideo = document.getElementById('bg-video');
 
-        // Включение звука при первом клике/касании в любой точке экрана
         function enableSound() {
             if (bgVideo) {
                 bgVideo.muted = false;

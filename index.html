@@ -189,7 +189,7 @@
             filter: none;
         }
 
-        /* Иконка Soundcloud / Links */
+        /* Иконка Links (Glock19) */
         .sc-link-box {
             position: fixed;
             bottom: 25px;
@@ -305,8 +305,8 @@
     <!-- СТАРТОВЫЙ ЭКРАН -->
     <div id="start-screen">
         <div class="start-card">
-            <img src="start.png" alt="Ракеты на Америку">
-            <button class="start-click-area" onclick="startSite()" title="Нажать"></button>
+            <img src="start.png" alt="Start Screen">
+            <button class="start-click-area" onclick="startSite()"></button>
         </div>
     </div>
 
@@ -314,8 +314,8 @@
     <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
 
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ В ЛЕВОМ ВЕРХНЕМ УГЛУ -->
-        <button class="power-btn" onclick="triggerShutdown(event)" title="Выключить">
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ (без title) -->
+        <button class="power-btn" onclick="triggerShutdown(event)">
             <img src="power.png" alt="Power Off">
         </button>
 
@@ -336,8 +336,8 @@
             </div>
         </div>
 
-        <!-- Иконка glock19 ведет на страницу links.html -->
-        <a href="links.html" class="sc-link-box" title="Links">
+        <!-- Иконка glock19 ведет на страницу links.html (без title) -->
+        <a href="links.html" class="sc-link-box">
             <img src="glock19.png" alt="Glock19">
         </a>
     </div>

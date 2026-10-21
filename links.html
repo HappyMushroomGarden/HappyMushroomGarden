@@ -38,24 +38,27 @@
             pointer-events: none;
         }
 
-        /* Кнопка "Назад" на главный сайт */
+        /* Картинка-кнопка "Назад" в левом верхнем углу */
         .back-btn {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 20;
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 18px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
+            width: 80px;
+            height: 80px;
+            display: block;
+            background: transparent;
+            outline: none;
+            border: none;
+            cursor: pointer;
         }
 
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .back-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
         /* Вертикальный контейнер с картинками по центру */
@@ -65,10 +68,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
-            flex-direction: column; /* Элементы выстроены вертикально */
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 25px; /* Отступ между картинками */
+            gap: 25px;
             z-index: 10;
             width: 100%;
             max-width: 90vw;
@@ -77,16 +80,10 @@
         .link-card {
             display: block;
             text-decoration: none;
-            transition: transform 0.2s ease, filter 0.2s ease;
+            /* Без эффектов увеличения и подсветки */
         }
 
-        .link-card:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-
-        /* Настройка размеров для трех уровней карт */
-        /* 1. Верхняя (самая высокая) */
+        /* Настройки размеров карточек */
         .link-card.top-card img {
             width: 220px;
             height: auto;
@@ -96,7 +93,6 @@
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
         }
 
-        /* 2. Средняя (посередине) */
         .link-card.mid-card img {
             width: 200px;
             height: auto;
@@ -106,7 +102,6 @@
             filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
         }
 
-        /* 3. Нижняя */
         .link-card.bot-card img {
             width: 180px;
             height: auto;
@@ -135,34 +130,36 @@
             }
 
             .back-btn {
+                width: 65px;
+                height: 65px;
                 top: 15px;
                 left: 15px;
-                font-size: 14px;
-                padding: 8px 14px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Кнопка возврата на главный сайт -->
-    <a href="index.html" class="back-btn">← Назад</a>
+    <!-- Картинка-кнопка Назад -->
+    <a href="index.html" class="back-btn" title="Назад">
+        <img src="back.png" alt="Back">
+    </a>
 
-    <!-- Новое фоновое видео для страницы ссылок -->
+    <!-- Фоновое видео -->
     <video id="bg-video" autoplay loop muted playsinline>
         <source src="links-bg.mp4" type="video/mp4">
     </video>
     <div class="overlay"></div>
 
-    <!-- Контейнер со ссылками-картинками (снизу вверх по центру) -->
+    <!-- Контейнер со ссылками -->
     <div class="links-container">
-        <!-- 1. Верхняя (самая высокая) — ТГК Основа -->
-        <a href="https://t.me/ТУТ_ТВОЙ_ТГК_ОСНОВА" target="_blank" class="link-card top-card">
+        <!-- 1. Верхняя — ТГК Основа -->
+        <a href="https://t.me/funnywounds" target="_blank" class="link-card top-card">
             <img src="tg-main.png" alt="ТГК Основа">
         </a>
 
         <!-- 2. Средняя — ТГК Личный -->
-        <a href="https://t.me/ТУТ_ТВОЙ_ЛИЧНЫЙ_ТГ" target="_blank" class="link-card mid-card">
+        <a href="https://t.me/canikill" target="_blank" class="link-card mid-card">
             <img src="tg-personal.png" alt="ТГК Личный">
         </a>
 
@@ -172,5 +169,15 @@
         </a>
     </div>
 
+    <script>
+        // Гарантированный запуск фонового видео
+        const bgVideo = document.getElementById('bg-video');
+        if (bgVideo) {
+            bgVideo.muted = true;
+            bgVideo.play().catch(err => {
+                console.log("Автозапуск заблокирован браузером:", err);
+            });
+        }
+    </script>
 </body>
 </html>

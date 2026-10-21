@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HappyMushroomGarden</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: monospace;
+        }
+
+        #start-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #start-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-card {
+            position: relative;
+            width: 90vw;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .start-card img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+        }
+
+        .start-click-area {
+            position: absolute;
+            top: 42%;
+            left: 42%;
+            width: 20%;
+            height: 18%;
+            border-radius: 50%;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+            z-index: 99;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .start-card {
+                max-width: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <div class="start-card">
+            <img src="start.png" alt="Start">
+            <button class="start-click-area" onclick="enterSite()"></button>
+        </div>
+    </div>
+
+    <!-- Звук клика -->
+    <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
+
+    <script>
+        const startSound = document.getElementById('start-sound');
+        const startScreen = document.getElementById('start-screen');
+
+        function enterSite() {
+            if (startSound) {
+                startSound.play().catch(() => {});
+            }
+
+            startScreen.classList.add('fade-out');
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

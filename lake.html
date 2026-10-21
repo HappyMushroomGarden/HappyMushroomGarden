@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lake</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #000;
+            font-family: monospace;
+        }
+
+        /* Кнопка возврата на главную (картинка back.png) */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            width: 80px;
+            height: 80px;
+            display: block;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        /* Вертикальный контейнер для плашек */
+        .links-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            padding: 100px 20px 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .link-card {
+            width: 100%;
+            max-width: 420px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .link-card img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7));
+        }
+
+        /* Адаптив под мобильные телефоны */
+        @media (max-width: 768px) {
+            .back-btn {
+                width: 65px;
+                height: 65px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .links-container {
+                gap: 20px;
+                padding-top: 90px;
+            }
+
+            .link-card {
+                max-width: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка возврата на главную страницу -->
+    <a href="index.html" class="back-btn">
+        <img src="back.png" alt="Back">
+    </a>
+
+    <!-- Вертикальный список плашек соцсетей -->
+    <div class="links-container">
+        <!-- ТГК Основа -->
+        <a href="https://t.me/funnywounds" target="_blank" class="link-card">
+            <img src="tg-main.png" alt="TG Main">
+        </a>
+
+        <!-- ТГ Личный -->
+        <a href="https://t.me/canikill" target="_blank" class="link-card">
+            <img src="tg-personal.png" alt="TG Personal">
+        </a>
+
+        <!-- SoundCloud -->
+        <a href="https://soundcloud.com/naduvanie_online" target="_blank" class="link-card">
+            <img src="sc-link.png" alt="SoundCloud">
+        </a>
+    </div>
+
+</body>
+</html>

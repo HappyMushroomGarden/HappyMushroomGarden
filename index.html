@@ -19,66 +19,13 @@
             font-family: monospace;
         }
 
-        /* 0. СТАРТОВЫЙ ЭКРАН-ЗАГЛУШКА */
-        #start-screen {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 9999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #start-screen.hidden {
-            display: none !important;
-        }
-
-        .start-card {
-            position: relative;
-            width: 90vw;
-            max-width: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-        }
-
-        .start-card img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            display: block;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
-        }
-
-        .start-click-area {
-            position: absolute;
-            top: 42%;
-            left: 42%;
-            width: 20%;
-            height: 18%;
-            border-radius: 50%;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            outline: none;
-            z-index: 99;
-            display: block;
-        }
-
         #site-wrapper {
             width: 100%;
             height: 100%;
             position: relative;
-            opacity: 0;
         }
 
-        #site-wrapper.visible {
-            opacity: 1;
-        }
-
-        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА */
+        /* Анимация выключения телевизора */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -99,7 +46,7 @@
             }
         }
 
-        /* 1. Кнопка выключения в левом верхнем углу */
+        /* Кнопка выключения в левом верхнем углу */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -140,8 +87,8 @@
             pointer-events: none;
         }
 
-        /* Контейнер порталов (ПК-версия) */
-        .portals-container {
+        /* Контейнер кнопок (ПК-версия) */
+        .items-container {
             position: fixed;
             top: 45%;
             left: 50%;
@@ -156,41 +103,37 @@
             max-width: 95vw;
         }
 
-        .portal-card {
+        .item-card {
             flex-shrink: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            display: block;
+            text-decoration: none;
         }
 
-        /* Десктопные размеры карточек */
-        .portal-card.card-1 {
+        /* Десктопные размеры */
+        .item-card.card-1 {
             width: 260px;
             height: 260px;
         }
 
-        .portal-card.card-2 {
+        .item-card.card-2 {
             width: 220px;
             height: 330px;
         }
 
-        .portal-card.card-3 {
+        .item-card.card-3 {
             width: 200px;
             height: 320px;
         }
 
-        .portal-card img {
+        .item-card img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
-            filter: none;
         }
 
-        /* Иконка Links (Glock19) */
-        .sc-link-box {
+        /* Иконка lake.html (Glock19) */
+        .lake-link-box {
             position: fixed;
             bottom: 25px;
             left: 50%;
@@ -199,11 +142,9 @@
             width: 90px;
             height: 90px;
             display: block;
-            background: transparent;
-            box-shadow: none;
         }
 
-        .sc-link-box img {
+        .lake-link-box img {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -213,21 +154,21 @@
 
         /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ */
         @media (max-width: 768px) {
-            .portals-container {
+            .items-container {
                 gap: 20px;
             }
 
-            .portal-card.card-1 {
+            .item-card.card-1 {
                 width: 105px;
                 height: 105px;
             }
 
-            .portal-card.card-2 {
+            .item-card.card-2 {
                 width: 95px;
                 height: 145px;
             }
 
-            .portal-card.card-3 {
+            .item-card.card-3 {
                 width: 85px;
                 height: 135px;
             }
@@ -239,41 +180,11 @@
                 left: 15px;
             }
 
-            .sc-link-box {
+            .lake-link-box {
                 width: 75px;
                 height: 75px;
                 bottom: 15px;
             }
-        }
-
-        /* Модалка для видео */
-        #video-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 50;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        #video-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            position: relative;
-            width: 90%;
-            max-width: 800px;
-            cursor: default;
-        }
-
-        .modal-content video {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
         }
 
         /* Экран выключения с off.mp4 */
@@ -302,50 +213,34 @@
 </head>
 <body>
 
-    <!-- СТАРТОВЫЙ ЭКРАН -->
-    <div id="start-screen">
-        <div class="start-card">
-            <img src="start.png" alt="Start Screen">
-            <button class="start-click-area" onclick="startSite()"></button>
-        </div>
-    </div>
-
-    <!-- Звук для стартовой кнопки -->
-    <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
-
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ (без title) -->
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ -->
         <button class="power-btn" onclick="triggerShutdown(event)">
             <img src="power.png" alt="Power Off">
         </button>
 
-        <video id="bg-video" loop playsinline>
+        <video id="bg-video" loop autoplay muted playsinline>
             <source src="background.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
 
-        <div class="portals-container">
-            <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
-                <img src="caps.png" alt="Edit 1">
-            </div>
-            <div class="portal-card card-2" onclick="openVideo('edits2.mp4')">
-                <img src="caps2.png" alt="Edit 2">
-            </div>
-            <div class="portal-card card-3" onclick="openVideo('edits3.mp4')">
-                <img src="caps3.png" alt="Edit 3">
-            </div>
+        <div class="items-container">
+            <!-- Кнопки-ссылки строго строчными буквами -->
+            <a href="conocybula.html" class="item-card card-1">
+                <img src="caps.png" alt="Conocybula">
+            </a>
+            <a href="inocybe.html" class="item-card card-2">
+                <img src="caps2.png" alt="Inocybe">
+            </a>
+            <a href="panaeolus.html" class="item-card card-3">
+                <img src="caps3.png" alt="Panaeolus">
+            </a>
         </div>
 
-        <!-- Иконка glock19 ведет на страницу links.html (без title) -->
-        <a href="links.html" class="sc-link-box">
-            <img src="glock19.png" alt="Glock19">
+        <!-- Иконка glock19 ведет на lake.html -->
+        <a href="lake.html" class="lake-link-box">
+            <img src="glock19.png" alt="Lake">
         </a>
-    </div>
-
-    <div id="video-modal" onclick="closeVideo()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <video id="popup-player" controls preload="auto" playsinline></video>
-        </div>
     </div>
 
     <div id="shutdown-screen">
@@ -357,65 +252,19 @@
     <audio id="btn-sound" src="button.mp3" preload="auto"></audio>
 
     <script>
-        const startScreen = document.getElementById('start-screen');
-        const startSound = document.getElementById('start-sound');
-        const modal = document.getElementById('video-modal');
-        const player = document.getElementById('popup-player');
-        const bgVideo = document.getElementById('bg-video');
         const siteWrapper = document.getElementById('site-wrapper');
         const shutdownScreen = document.getElementById('shutdown-screen');
         const shutdownVideo = document.getElementById('shutdown-video');
         const btnSound = document.getElementById('btn-sound');
-
-        let isShutdown = false;
-
-        function startSite() {
-            if (startSound) {
-                startSound.play().catch(() => {});
-            }
-
-            startScreen.classList.add('hidden');
-
-            setTimeout(() => {
-                siteWrapper.classList.add('visible');
-
-                if (bgVideo) {
-                    bgVideo.muted = false;
-                    bgVideo.play().catch(err => {
-                        console.log("Ошибка запуска фона:", err);
-                    });
-                }
-            }, 1000);
-        }
-
-        function openVideo(videoSrc) {
-            if (isShutdown) return;
-            if (bgVideo) bgVideo.pause();
-            player.src = videoSrc;
-            player.load();
-            modal.classList.add('active');
-            player.play().catch(() => {});
-        }
-
-        function closeVideo() {
-            if (isShutdown) return;
-            player.pause();
-            player.src = '';
-            modal.classList.remove('active');
-            if (bgVideo) bgVideo.play().catch(() => {});
-        }
+        const bgVideo = document.getElementById('bg-video');
 
         function triggerShutdown(e) {
             if (e) e.stopPropagation();
-            isShutdown = true;
-
             if (btnSound) btnSound.play().catch(() => {});
             siteWrapper.classList.add('tv-off');
 
             setTimeout(() => {
                 if (bgVideo) bgVideo.pause();
-                player.pause();
-                modal.classList.remove('active');
                 siteWrapper.style.display = 'none';
 
                 setTimeout(() => {
@@ -423,19 +272,8 @@
                     shutdownVideo.currentTime = 0;
                     shutdownVideo.play().catch(() => {});
                 }, 1000);
-
             }, 500);
         }
-
-        document.addEventListener('keydown', (e) => {
-            if (isShutdown) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.key === 'Escape') {
-                closeVideo();
-            }
-        });
     </script>
 </body>
 </html>

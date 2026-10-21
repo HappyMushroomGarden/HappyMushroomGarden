@@ -18,7 +18,6 @@
             background-color: #000;
         }
 
-        /* Полноэкранное видео */
         #fullscreen-video {
             position: fixed;
             top: 0;
@@ -29,7 +28,6 @@
             z-index: 1;
         }
 
-        /* Кнопка возврата на главную (картинка back.png) */
         .back-btn {
             position: fixed;
             top: 20px;
@@ -53,7 +51,6 @@
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
-        /* Мобильный адаптив */
         @media (max-width: 768px) {
             .back-btn {
                 width: 65px;
@@ -66,12 +63,10 @@
 </head>
 <body>
 
-    <!-- Кнопка возврата на главную страницу -->
-    <a href="index.html" class="back-btn">
+    <a href="mushroom.html" class="back-btn">
         <img src="back.png" alt="Back">
     </a>
 
-    <!-- Видеопроигрыватель на весь экран -->
     <video id="fullscreen-video" autoplay controls playsinline>
         <source src="edits.mp4" type="video/mp4">
     </video>

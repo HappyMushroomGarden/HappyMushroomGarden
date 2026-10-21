@@ -19,89 +19,308 @@
             font-family: monospace;
         }
 
-        #start-screen {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
+        #site-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
 
-        #start-screen.fade-out {
-            opacity: 0;
+        /* Анимация схлопывания телевизора */
+        #site-wrapper.tv-off {
+            animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes tvShutdown {
+            0% {
+                transform: scale(1, 1);
+                filter: brightness(1);
+            }
+            40% {
+                transform: scale(1, 0.005);
+                filter: brightness(2);
+            }
+            100% {
+                transform: scale(0, 0);
+                filter: brightness(0);
+            }
+        }
+
+        /* Кнопка выключения — высочайший z-index для гарантии клика */
+        .power-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 99999;
+            width: 80px;
+            height: 80px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .power-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        /* Фоновое видео */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
             pointer-events: none;
         }
 
-        .start-card {
-            position: relative;
-            width: 90vw;
-            max-width: 450px;
+        /* Контейнер кнопок */
+        .items-container {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             display: flex;
+            flex-direction: row;
+            gap: 100px;
+            z-index: 10;
             align-items: center;
             justify-content: center;
-            user-select: none;
+            width: 100%;
+            max-width: 95vw;
         }
 
-        .start-card img {
+        .item-card {
+            flex-shrink: 0;
+            display: block;
+            text-decoration: none;
+        }
+
+        .item-card.card-1 {
+            width: 260px;
+            height: 260px;
+        }
+
+        .item-card.card-2 {
+            width: 220px;
+            height: 330px;
+        }
+
+        .item-card.card-3 {
+            width: 200px;
+            height: 320px;
+        }
+
+        .item-card img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: contain;
             display: block;
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
         }
 
-        .start-click-area {
-            position: absolute;
-            top: 42%;
-            left: 42%;
-            width: 20%;
-            height: 18%;
-            border-radius: 50%;
-            cursor: pointer;
+        /* Иконка lake.html (Glock19) */
+        .lake-link-box {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            width: 90px;
+            height: 90px;
+            display: block;
+        }
+
+        .lake-link-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        /* Мобильный адаптив */
+        @media (max-width: 768px) {
+            .items-container {
+                gap: 20px;
+            }
+
+            .item-card.card-1 {
+                width: 105px;
+                height: 105px;
+            }
+
+            .item-card.card-2 {
+                width: 95px;
+                height: 145px;
+            }
+
+            .item-card.card-3 {
+                width: 85px;
+                height: 135px;
+            }
+
+            .power-btn {
+                width: 65px;
+                height: 65px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .lake-link-box {
+                width: 75px;
+                height: 75px;
+                bottom: 15px;
+            }
+        }
+
+        /* Полноэкранный экран выключения с off.mp4 */
+        #shutdown-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999999;
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #shutdown-screen.active {
+            display: block;
+        }
+
+        #shutdown-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Кнопка выхода (back.png) появляется после просмотра off.mp4 */
+        .off-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 99999999;
+            width: 80px;
+            height: 80px;
+            display: block;
             background: transparent;
             border: none;
             outline: none;
-            z-index: 99;
-            display: block;
+            cursor: pointer;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
-        @media (max-width: 768px) {
-            .start-card {
-                max-width: 320px;
-            }
+        .off-back-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .off-back-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
     </style>
 </head>
 <body>
 
-    <div id="start-screen">
-        <div class="start-card">
-            <img src="start.png" alt="Start">
-            <button class="start-click-area" onclick="enterSite()"></button>
+    <div id="site-wrapper">
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ -->
+        <button class="power-btn" id="power-button">
+            <img src="power.png" alt="Power Off">
+        </button>
+
+        <!-- Фоновое видео -->
+        <video id="bg-video" loop autoplay playsinline muted>
+            <source src="background.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+
+        <div class="items-container">
+            <a href="conocybula.html" class="item-card card-1">
+                <img src="caps.png" alt="Conocybula">
+            </a>
+            <a href="inocybe.html" class="item-card card-2">
+                <img src="caps2.png" alt="Inocybe">
+            </a>
+            <a href="panaeolus.html" class="item-card card-3">
+                <img src="caps3.png" alt="Panaeolus">
+            </a>
         </div>
+
+        <a href="lake.html" class="lake-link-box">
+            <img src="glock19.png" alt="Lake">
+        </a>
     </div>
 
-    <!-- Звук клика -->
-    <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
+    <!-- ЭКРАН С ВИДЕО ВЫКЛЮЧЕНИЯ (off.mp4) -->
+    <div id="shutdown-screen">
+        <a href="mushroom.html" class="off-back-btn" id="off-back-btn">
+            <img src="back.png" alt="Back">
+        </a>
+        <video id="shutdown-video" playsinline>
+            <source src="off.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <audio id="btn-sound" src="button.mp3" preload="auto"></audio>
 
     <script>
-        const startSound = document.getElementById('start-sound');
-        const startScreen = document.getElementById('start-screen');
+        const siteWrapper = document.getElementById('site-wrapper');
+        const shutdownScreen = document.getElementById('shutdown-screen');
+        const shutdownVideo = document.getElementById('shutdown-video');
+        const btnSound = document.getElementById('btn-sound');
+        const bgVideo = document.getElementById('bg-video');
+        const powerBtn = document.getElementById('power-button');
+        const offBackBtn = document.getElementById('off-back-btn');
 
-        function enterSite() {
-            if (startSound) {
-                startSound.play().catch(() => {});
+        // Гарантированный автозапуск звука при взаимодействии
+        document.addEventListener('click', () => {
+            if (bgVideo && bgVideo.muted) {
+                bgVideo.muted = false;
             }
+        }, { once: true });
 
-            startScreen.classList.add('fade-out');
+        // Обработка клика по кнопке выключения
+        powerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btnSound) btnSound.play().catch(() => {});
+            
+            siteWrapper.classList.add('tv-off');
 
             setTimeout(() => {
-                window.location.href = 'mushroom.html';
-            }, 1000);
-        }
+                if (bgVideo) bgVideo.pause();
+                siteWrapper.style.display = 'none';
+
+                shutdownScreen.classList.add('active');
+                shutdownVideo.currentTime = 0;
+                shutdownVideo.play().catch(() => {});
+            }, 500);
+        });
+
+        // Появление кнопки выхода (back.png) ПОСЛЕ первого просмотра off.mp4
+        shutdownVideo.addEventListener('ended', () => {
+            offBackBtn.classList.add('show');
+        });
     </script>
 </body>
 </html>

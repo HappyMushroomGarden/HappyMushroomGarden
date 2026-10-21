@@ -29,7 +29,7 @@
             z-index: 1;
         }
 
-        /* Кнопка возврата (скрыта по умолчанию) */
+        /* Кнопка возврата видна сразу */
         .back-btn {
             position: fixed;
             top: 20px;
@@ -43,14 +43,6 @@
             outline: none;
             cursor: pointer;
             text-decoration: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .back-btn.show {
-            opacity: 1;
-            visibility: visible;
         }
 
         .back-btn img {
@@ -74,8 +66,8 @@
 </head>
 <body>
 
-    <!-- Кнопка возврата на главную (mushroom.html) -->
-    <a href="mushroom.html" class="back-btn" id="back-btn">
+    <!-- Кнопка возврата на главную (mushroom.html) видна всегда -->
+    <a href="mushroom.html" class="back-btn">
         <img src="back.png" alt="Back">
     </a>
 
@@ -84,14 +76,5 @@
         <source src="edits3.mp4" type="video/mp4">
     </video>
 
-    <script>
-        const video = document.getElementById('fullscreen-video');
-        const backBtn = document.getElementById('back-btn');
-
-        // Показываем кнопку назад ровно после завершения 1-го просмотра
-        video.addEventListener('ended', () => {
-            backBtn.classList.add('show');
-        });
-    </script>
 </body>
 </html>

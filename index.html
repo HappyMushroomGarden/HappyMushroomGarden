@@ -19,13 +19,66 @@
             font-family: monospace;
         }
 
+        /* 0. СТАРТОВЫЙ ЭКРАН-ЗАГЛУШКА */
+        #start-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #start-screen.hidden {
+            display: none !important;
+        }
+
+        .start-card {
+            position: relative;
+            width: 90vw;
+            max-width: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .start-card img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+        }
+
+        .start-click-area {
+            position: absolute;
+            top: 42%;
+            left: 42%;
+            width: 20%;
+            height: 18%;
+            border-radius: 50%;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+            z-index: 99;
+            display: block;
+        }
+
         #site-wrapper {
             width: 100%;
             height: 100%;
             position: relative;
+            opacity: 0;
         }
 
-        /* Анимация схлопывания телевизора */
+        #site-wrapper.visible {
+            opacity: 1;
+        }
+
+        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -46,12 +99,12 @@
             }
         }
 
-        /* Кнопка выключения — высочайший z-index для гарантии клика */
+        /* 1. Кнопка выключения в левом верхнем углу */
         .power-btn {
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 99999;
+            z-index: 20;
             width: 80px;
             height: 80px;
             background: transparent;
@@ -87,8 +140,8 @@
             pointer-events: none;
         }
 
-        /* Контейнер кнопок */
-        .items-container {
+        /* Контейнер порталов (ПК-версия) */
+        .portals-container {
             position: fixed;
             top: 45%;
             left: 50%;
@@ -103,36 +156,41 @@
             max-width: 95vw;
         }
 
-        .item-card {
+        .portal-card {
             flex-shrink: 0;
-            display: block;
-            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .item-card.card-1 {
+        /* Десктопные размеры карточек */
+        .portal-card.card-1 {
             width: 260px;
             height: 260px;
         }
 
-        .item-card.card-2 {
+        .portal-card.card-2 {
             width: 220px;
             height: 330px;
         }
 
-        .item-card.card-3 {
+        .portal-card.card-3 {
             width: 200px;
             height: 320px;
         }
 
-        .item-card img {
+        .portal-card img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
+            filter: none;
         }
 
-        /* Иконка lake.html (Glock19) */
-        .lake-link-box {
+        /* Иконка Links (Glock19) */
+        .sc-link-box {
             position: fixed;
             bottom: 25px;
             left: 50%;
@@ -141,9 +199,11 @@
             width: 90px;
             height: 90px;
             display: block;
+            background: transparent;
+            box-shadow: none;
         }
 
-        .lake-link-box img {
+        .sc-link-box img {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -151,23 +211,23 @@
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
-        /* Мобильный адаптив */
+        /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ */
         @media (max-width: 768px) {
-            .items-container {
+            .portals-container {
                 gap: 20px;
             }
 
-            .item-card.card-1 {
+            .portal-card.card-1 {
                 width: 105px;
                 height: 105px;
             }
 
-            .item-card.card-2 {
+            .portal-card.card-2 {
                 width: 95px;
                 height: 145px;
             }
 
-            .item-card.card-3 {
+            .portal-card.card-3 {
                 width: 85px;
                 height: 135px;
             }
@@ -179,19 +239,49 @@
                 left: 15px;
             }
 
-            .lake-link-box {
+            .sc-link-box {
                 width: 75px;
                 height: 75px;
                 bottom: 15px;
             }
         }
 
-        /* Полноэкранный экран выключения с off.mp4 */
+        /* Модалка для видео */
+        #video-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #video-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            cursor: default;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* Экран выключения с off.mp4 */
         #shutdown-screen {
             position: fixed;
             inset: 0;
             background: #000;
-            z-index: 9999999;
+            z-index: 999999;
             display: none;
             width: 100vw;
             height: 100vh;
@@ -206,78 +296,60 @@
             height: 100%;
             object-fit: cover;
             display: block;
-        }
-
-        /* Кнопка выхода (back.png) появляется после просмотра off.mp4 */
-        .off-back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 99999999;
-            width: 80px;
-            height: 80px;
-            display: block;
-            background: transparent;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            text-decoration: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .off-back-btn.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .off-back-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="start-screen">
+        <div class="start-card">
+            <img src="start.png" alt="Start Screen">
+            <button class="start-click-area" onclick="startSite()"></button>
+        </div>
+    </div>
+
+    <!-- Звук для стартовой кнопки -->
+    <audio id="start-sound" src="start-sound.mp3" preload="auto"></audio>
+
     <div id="site-wrapper">
-        <!-- КНОПКА ВЫКЛЮЧЕНИЯ -->
-        <button class="power-btn" id="power-button">
+        <!-- КНОПКА ВЫКЛЮЧЕНИЯ (без title) -->
+        <button class="power-btn" onclick="triggerShutdown(event)">
             <img src="power.png" alt="Power Off">
         </button>
 
-        <!-- Фоновое видео -->
-        <video id="bg-video" loop autoplay playsinline muted>
+        <video id="bg-video" loop playsinline>
             <source src="background.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
 
-        <div class="items-container">
-            <a href="conocybula.html" class="item-card card-1">
-                <img src="caps.png" alt="Conocybula">
-            </a>
-            <a href="inocybe.html" class="item-card card-2">
-                <img src="caps2.png" alt="Inocybe">
-            </a>
-            <a href="panaeolus.html" class="item-card card-3">
-                <img src="caps3.png" alt="Panaeolus">
-            </a>
+        <div class="portals-container">
+            <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
+                <img src="caps.png" alt="Edit 1">
+            </div>
+            <div class="portal-card card-2" onclick="openVideo('edits2.mp4')">
+                <img src="caps2.png" alt="Edit 2">
+            </div>
+            <div class="portal-card card-3" onclick="openVideo('edits3.mp4')">
+                <img src="caps3.png" alt="Edit 3">
+            </div>
         </div>
 
-        <a href="lake.html" class="lake-link-box">
-            <img src="glock19.png" alt="Lake">
+        <!-- Иконка glock19 ведет на страницу links.html (без title) -->
+        <a href="links.html" class="sc-link-box">
+            <img src="glock19.png" alt="Glock19">
         </a>
     </div>
 
-    <!-- ЭКРАН С ВИДЕО ВЫКЛЮЧЕНИЯ (off.mp4) -->
+    <div id="video-modal" onclick="closeVideo()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <video id="popup-player" controls preload="auto" playsinline></video>
+        </div>
+    </div>
+
     <div id="shutdown-screen">
-        <a href="mushroom.html" class="off-back-btn" id="off-back-btn">
-            <img src="back.png" alt="Back">
-        </a>
-        <video id="shutdown-video" playsinline>
+        <video id="shutdown-video" loop playsinline>
             <source src="off.mp4" type="video/mp4">
         </video>
     </div>
@@ -285,41 +357,84 @@
     <audio id="btn-sound" src="button.mp3" preload="auto"></audio>
 
     <script>
+        const startScreen = document.getElementById('start-screen');
+        const startSound = document.getElementById('start-sound');
+        const modal = document.getElementById('video-modal');
+        const player = document.getElementById('popup-player');
+        const bgVideo = document.getElementById('bg-video');
         const siteWrapper = document.getElementById('site-wrapper');
         const shutdownScreen = document.getElementById('shutdown-screen');
         const shutdownVideo = document.getElementById('shutdown-video');
         const btnSound = document.getElementById('btn-sound');
-        const bgVideo = document.getElementById('bg-video');
-        const powerBtn = document.getElementById('power-button');
-        const offBackBtn = document.getElementById('off-back-btn');
 
-        // Гарантированный автозапуск звука при взаимодействии
-        document.addEventListener('click', () => {
-            if (bgVideo && bgVideo.muted) {
-                bgVideo.muted = false;
+        let isShutdown = false;
+
+        function startSite() {
+            if (startSound) {
+                startSound.play().catch(() => {});
             }
-        }, { once: true });
 
-        // Обработка клика по кнопке выключения
-        powerBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+            startScreen.classList.add('hidden');
+
+            setTimeout(() => {
+                siteWrapper.classList.add('visible');
+
+                if (bgVideo) {
+                    bgVideo.muted = false;
+                    bgVideo.play().catch(err => {
+                        console.log("Ошибка запуска фона:", err);
+                    });
+                }
+            }, 1000);
+        }
+
+        function openVideo(videoSrc) {
+            if (isShutdown) return;
+            if (bgVideo) bgVideo.pause();
+            player.src = videoSrc;
+            player.load();
+            modal.classList.add('active');
+            player.play().catch(() => {});
+        }
+
+        function closeVideo() {
+            if (isShutdown) return;
+            player.pause();
+            player.src = '';
+            modal.classList.remove('active');
+            if (bgVideo) bgVideo.play().catch(() => {});
+        }
+
+        function triggerShutdown(e) {
+            if (e) e.stopPropagation();
+            isShutdown = true;
+
             if (btnSound) btnSound.play().catch(() => {});
-            
             siteWrapper.classList.add('tv-off');
 
             setTimeout(() => {
                 if (bgVideo) bgVideo.pause();
+                player.pause();
+                modal.classList.remove('active');
                 siteWrapper.style.display = 'none';
 
-                shutdownScreen.classList.add('active');
-                shutdownVideo.currentTime = 0;
-                shutdownVideo.play().catch(() => {});
-            }, 500);
-        });
+                setTimeout(() => {
+                    shutdownScreen.classList.add('active');
+                    shutdownVideo.currentTime = 0;
+                    shutdownVideo.play().catch(() => {});
+                }, 1000);
 
-        // Появление кнопки выхода (back.png) ПОСЛЕ первого просмотра off.mp4
-        shutdownVideo.addEventListener('ended', () => {
-            offBackBtn.classList.add('show');
+            }, 500);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (isShutdown) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
         });
     </script>
 </body>

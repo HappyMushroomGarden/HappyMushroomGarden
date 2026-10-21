@@ -79,19 +79,18 @@
         <img src="back.png" alt="Back">
     </a>
 
-    <!-- Видеопроигрыватель на весь экран -->
-    <video id="fullscreen-video" autoplay controls playsinline>
+    <!-- Видеопроигрыватель на весь экран с зацикливанием (loop) -->
+    <video id="fullscreen-video" autoplay loop controls playsinline>
         <source src="off.mp4" type="video/mp4">
     </video>
 
     <script>
-        const video = document.getElementById('fullscreen-video');
         const backBtn = document.getElementById('back-btn');
 
-        // Показываем кнопку назад ровно после завершения 1-го просмотра
-        video.addEventListener('ended', () => {
+        // Показываем кнопку назад через 2 секунды после начала воспроизведения (пока видео идет по кругу)
+        setTimeout(() => {
             backBtn.classList.add('show');
-        });
+        }, 2000);
     </script>
 </body>
 </html>

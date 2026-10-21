@@ -181,10 +181,6 @@
             height: 320px;
         }
 
-        .portal-card.no-click {
-            cursor: default;
-        }
-
         .portal-card img {
             width: 100%;
             height: 100%;
@@ -215,10 +211,10 @@
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
         }
 
-        /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ (экраны уже 768px) */
+        /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ */
         @media (max-width: 768px) {
             .portals-container {
-                gap: 20px; /* Уменьшаем отступы между карточками, чтобы они не вылезали за края */
+                gap: 20px;
             }
 
             .portal-card.card-1 {
@@ -250,7 +246,7 @@
             }
         }
 
-        /* Модалка для обычных видео */
+        /* Модалка для видео */
         #video-modal {
             position: fixed;
             inset: 0;
@@ -335,7 +331,8 @@
             <div class="portal-card card-2" onclick="openVideo('edits2.mp4')">
                 <img src="caps2.png" alt="Edit 2">
             </div>
-            <div class="portal-card card-3 no-click">
+            <!-- Дверь caps3 теперь открывает edits3.mp4 -->
+            <div class="portal-card card-3" onclick="openVideo('edits3.mp4')">
                 <img src="caps3.png" alt="Edit 3">
             </div>
         </div>

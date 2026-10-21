@@ -219,7 +219,8 @@
             <img src="power.png" alt="Power Off">
         </button>
 
-        <video id="bg-video" loop autoplay muted playsinline>
+        <!-- Фоновое видео БЕЗ muted (со звуком) -->
+        <video id="bg-video" loop autoplay playsinline>
             <source src="background.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
@@ -258,22 +259,8 @@
         const btnSound = document.getElementById('btn-sound');
         const bgVideo = document.getElementById('bg-video');
 
-        function triggerShutdown(e) {
-            if (e) e.stopPropagation();
-            if (btnSound) btnSound.play().catch(() => {});
-            siteWrapper.classList.add('tv-off');
-
-            setTimeout(() => {
-                if (bgVideo) bgVideo.pause();
-                siteWrapper.style.display = 'none';
-
-                setTimeout(() => {
-                    shutdownScreen.classList.add('active');
-                    shutdownVideo.currentTime = 0;
-                    shutdownVideo.play().catch(() => {});
-                }, 1000);
-            }, 500);
-        }
-    </script>
-</body>
-</html>
+        // Гарантированный запуск звука фонового видео
+        window.addEventListener('DOMContentLoaded', () => {
+            if (bgVideo) {
+                bgVideo.muted = false;
+                bgVideo.play().catch(() => {

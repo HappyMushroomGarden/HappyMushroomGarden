@@ -71,14 +71,14 @@
             width: 100%;
             height: 100%;
             position: relative;
-            opacity: 0; /* Изначально скрыт для резкого появления */
+            opacity: 0;
         }
 
         #site-wrapper.visible {
-            opacity: 1; /* Резкое появление */
+            opacity: 1;
         }
 
-        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (оставлена по умолчанию для красивого финала) */
+        /* АНИМАЦИЯ ВЫКЛЮЧЕНИЯ ТЕЛЕВИЗОРА */
         #site-wrapper.tv-off {
             animation: tvShutdown 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             transform-origin: center center;
@@ -102,11 +102,11 @@
         /* 1. Кнопка выключения в левом верхнем углу */
         .power-btn {
             position: fixed;
-            top: 25px;
-            left: 25px;
+            top: 20px;
+            left: 20px;
             z-index: 20;
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -140,7 +140,7 @@
             pointer-events: none;
         }
 
-        /* Контейнер порталов */
+        /* Контейнер порталов (ПК-версия) */
         .portals-container {
             position: fixed;
             top: 45%;
@@ -165,7 +165,7 @@
             overflow: hidden;
         }
 
-        /* Размеры карточек */
+        /* Десктопные размеры карточек */
         .portal-card.card-1 {
             width: 260px;
             height: 260px;
@@ -200,8 +200,8 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             display: block;
             background: transparent;
             box-shadow: none;
@@ -213,6 +213,41 @@
             object-fit: contain;
             display: block;
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8));
+        }
+
+        /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ (экраны уже 768px) */
+        @media (max-width: 768px) {
+            .portals-container {
+                gap: 20px; /* Уменьшаем отступы между карточками, чтобы они не вылезали за края */
+            }
+
+            .portal-card.card-1 {
+                width: 105px;
+                height: 105px;
+            }
+
+            .portal-card.card-2 {
+                width: 95px;
+                height: 145px;
+            }
+
+            .portal-card.card-3 {
+                width: 85px;
+                height: 135px;
+            }
+
+            .power-btn {
+                width: 65px;
+                height: 65px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .sc-link-box {
+                width: 75px;
+                height: 75px;
+                bottom: 15px;
+            }
         }
 
         /* Модалка для обычных видео */
@@ -342,10 +377,8 @@
                 startSound.play().catch(() => {});
             }
 
-            // Убираем стартовый экран
             startScreen.classList.add('hidden');
 
-            // 1 секунда паузы в темноте, затем резкое появление сайта
             setTimeout(() => {
                 siteWrapper.classList.add('visible');
 
@@ -355,7 +388,7 @@
                         console.log("Ошибка запуска фона:", err);
                     });
                 }
-            }, 1000); // 1000 мс = 1 секунда
+            }, 1000);
         }
 
         function openVideo(videoSrc) {

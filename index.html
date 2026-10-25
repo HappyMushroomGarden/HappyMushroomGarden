@@ -99,7 +99,7 @@
             }
         }
 
-        /* 1. Кнопка выключения в левом верхнем углу */
+        /* Кнопка выключения в левом верхнем углу */
         .power-btn {
             position: fixed;
             top: 20px;
@@ -140,7 +140,7 @@
             pointer-events: none;
         }
 
-        /* КОНТЕЙНЕР ПОРТАЛОВ */
+        /* КОНТЕЙНЕР ВСЕХ ПОРТАЛОВ В РЯД */
         .portals-container {
             position: fixed;
             top: 45%;
@@ -148,12 +148,12 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
-            gap: 90px;
+            gap: 25px;
             z-index: 10;
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 95vw;
+            max-width: 98vw;
         }
 
         .portal-card {
@@ -168,39 +168,32 @@
             cursor: default;
         }
 
-        /* Основные 3 портала в ряд */
+        /* Размеры элементов: основные стоят на месте, 4-й и 5-й смещены ниже через translateY */
         .portal-card.card-1 {
-            width: 220px;
-            height: 220px;
+            width: 190px;
+            height: 190px;
+        }
+
+        .portal-card.card-4 {
+            width: 160px;
+            height: 160px;
+            transform: translateY(65px); /* Смещен вниз между 1 и 2 */
         }
 
         .portal-card.card-2 {
-            width: 190px;
-            height: 280px;
-        }
-
-        .portal-card.card-3 {
-            width: 200px;
-            height: 290px;
-        }
-
-        /* 4 и 5 порталы — строго между 1-2 и 2-3, смещены ниже */
-        .portal-card.card-4 {
-            position: absolute;
-            left: 38%;
-            top: 60%;
-            transform: translate(-50%, 0);
             width: 160px;
-            height: 160px;
+            height: 240px;
         }
 
         .portal-card.card-5 {
-            position: absolute;
-            left: 67%;
-            top: 60%;
-            transform: translate(-50%, 0);
             width: 160px;
             height: 160px;
+            transform: translateY(65px); /* Смещен вниз между 2 и 3 */
+        }
+
+        .portal-card.card-3 {
+            width: 170px;
+            height: 250px;
         }
 
         .portal-card img {
@@ -236,37 +229,34 @@
         /* АДАПТИВ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ */
         @media (max-width: 768px) {
             .portals-container {
-                gap: 20px;
-                top: 40%;
+                gap: 8px;
             }
 
             .portal-card.card-1 {
-                width: 80px;
-                height: 80px;
-            }
-
-            .portal-card.card-2 {
-                width: 70px;
-                height: 105px;
-            }
-
-            .portal-card.card-3 {
-                width: 75px;
-                height: 110px;
+                width: 60px;
+                height: 60px;
             }
 
             .portal-card.card-4 {
-                left: 36%;
-                top: 58%;
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
+                transform: translateY(22px);
+            }
+
+            .portal-card.card-2 {
+                width: 55px;
+                height: 80px;
             }
 
             .portal-card.card-5 {
-                left: 70%;
-                top: 58%;
+                width: 50px;
+                height: 50px;
+                transform: translateY(22px);
+            }
+
+            .portal-card.card-3 {
                 width: 60px;
-                height: 60px;
+                height: 85px;
             }
 
             .power-btn {
@@ -361,10 +351,16 @@
         </video>
         <div class="overlay"></div>
 
+        <!-- ВСЕ 5 ПОРТАЛОВ В СТРОГОМ ПОРЯДКЕ -->
         <div class="portals-container">
             <!-- 1 портал -->
             <div class="portal-card card-1" onclick="openVideo('edits.mp4')">
                 <img src="caps.png" alt="Edit 1">
+            </div>
+
+            <!-- 4 портал (между 1 и 2, ниже) -->
+            <div class="portal-card card-4" onclick="openVideo('edits4.mp4')">
+                <img src="caps4.png" alt="Edit 4">
             </div>
 
             <!-- 2 портал -->
@@ -372,20 +368,15 @@
                 <img src="caps2.png" alt="Edit 2">
             </div>
 
+            <!-- 5 портал (между 2 и 3, ниже, заглушка) -->
+            <div class="portal-card card-5 disabled">
+                <img src="caps5.png" alt="Edit 5">
+            </div>
+
             <!-- 3 портал -->
             <div class="portal-card card-3" onclick="openVideo('edits3.mp4')">
                 <img src="caps3.png" alt="Edit 3">
             </div>
-        </div>
-
-        <!-- 4 портал (между 1 и 2, ниже) -->
-        <div class="portal-card card-4" onclick="openVideo('edits4.mp4')">
-            <img src="caps4.png" alt="Edit 4">
-        </div>
-
-        <!-- 5 портал (между 2 и 3, ниже, заглушка) -->
-        <div class="portal-card card-5 disabled">
-            <img src="caps5.png" alt="Edit 5">
         </div>
 
         <!-- Иконка glock19 ведет на страницу links.html -->
